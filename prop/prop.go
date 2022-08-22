@@ -66,12 +66,14 @@ func Async(flag bool) vecty.Applyer {
 //
 // <form>, <input>
 func Autocomplete(flag bool) vecty.Applyer {
-	value := "off"
+	var stringFlag string
 	if flag {
-		value = "on"
+		stringFlag = "on"
+	} else {
+		stringFlag = "off"
 	}
 
-	return vecty.Property("autocomplete", value)
+	return vecty.Property("autocomplete", stringFlag)
 }
 
 // Autofocus specifies that the element should automatically get focus when the page loads
@@ -639,7 +641,7 @@ func (b *MediaQuery) Scan(t ScanCase) *MediaQuery {
 }
 
 func (b *MediaQuery) Grid(value bool) *MediaQuery {
-	intValue := 0
+	var intValue int
 	if value {
 		intValue = 1
 	}
@@ -876,17 +878,17 @@ func Size(value uint64) vecty.Applyer {
 //
 // <img>, <link>, <source>
 func Sizes(values ...[2]uint64) vecty.Applyer {
-	var sizes string
+	var stringValues string
 	for _, pair := range values {
 		if pair[0] == 0 {
-			sizes = "any"
+			stringValues = "any"
 			break
 		}
 
-		sizes += fmt.Sprintf("%dx%d ", pair[0], pair[1])
+		stringValues += fmt.Sprintf("%dx%d ", pair[0], pair[1])
 	}
 
-	return vecty.Property("sizes", sizes)
+	return vecty.Property("sizes", stringValues)
 }
 
 // Span specifies the number of columns to span
@@ -942,9 +944,11 @@ func Start(value int64) vecty.Applyer {
 //
 // <input>
 func Step(value uint64) vecty.Applyer {
-	stringValue := fmt.Sprintf("%d", value)
+	var stringValue string
 	if value == 0 {
 		stringValue = "any"
+	} else {
+		stringValue = fmt.Sprintf("%d", value)
 	}
 
 	return vecty.Property("step", stringValue)
