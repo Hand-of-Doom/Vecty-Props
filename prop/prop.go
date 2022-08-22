@@ -907,6 +907,9 @@ func Wrap(c WrapCase) vecty.Applyer {
 	return vecty.Property("wrap", c)
 }
 
+// Vecty has an event package so this function does literally nothing
+/*
 func On(event string, rawJS string) vecty.Applyer {
 	return vecty.Property("on"+event, rawJS)
 }
+*/
