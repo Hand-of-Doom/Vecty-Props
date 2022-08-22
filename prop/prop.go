@@ -24,7 +24,7 @@ func (styleSet CSS) formatRaw() string {
 	return rawCSS
 }
 
-type AcceptCase string
+type AcceptCase = string
 
 const (
 	AcceptCaseMedia AcceptCase = "audio/*"
@@ -260,7 +260,7 @@ func Defer(flag bool) vecty.Applyer {
 	return vecty.Property("defer", flag)
 }
 
-type DirCase string
+type DirCase = string
 
 const (
 	DirCaseLTR  DirCase = "ltr"
@@ -310,7 +310,7 @@ func Draggable(flag bool) vecty.Applyer {
 	return vecty.Property("draggable", flag)
 }
 
-type EnctypeCase string
+type EnctypeCase = string
 
 const (
 	EnctypeCaseFormUrlencoded    EnctypeCase = "application/x-www-form-urlencoded"
@@ -388,7 +388,7 @@ func HrefLang(value string) vecty.Applyer {
 	return vecty.Property("hreflang", value)
 }
 
-type httpEquivCase string
+type httpEquivCase = string
 
 const (
 	httpEquivCaseSecurityPolice httpEquivCase = "content-security-policy"
@@ -418,7 +418,7 @@ func IsMap(flag bool) vecty.Applyer {
 	return vecty.Property("ismap", flag)
 }
 
-type KindCase string
+type KindCase = string
 
 const (
 	KindCaseCaptions     KindCase = "captions"
@@ -491,7 +491,7 @@ func Media(values CSS) vecty.Applyer {
 	return vecty.Property("media", values.formatRaw())
 }
 
-type MethodCase string
+type MethodCase = string
 
 const (
 	MethodCaseGET  MethodCase = "GET"
@@ -575,7 +575,7 @@ func Poster(value URL) vecty.Applyer {
 	return vecty.Property("poster", value)
 }
 
-type PreloadCase string
+type PreloadCase = string
 
 const (
 	PreloadCaseAuto     PreloadCase = "auto"
@@ -597,7 +597,7 @@ func Readonly(flag bool) vecty.Applyer {
 	return vecty.Property("readonly", flag)
 }
 
-type RelCase string
+type RelCase = string
 
 const (
 	RelCaseAlternate  RelCase = "alternate"
@@ -657,7 +657,7 @@ func Sandbox(flag bool) vecty.Applyer {
 	return vecty.Property("sandbox", flag)
 }
 
-type ScopeCase string
+type ScopeCase = string
 
 const (
 	ScopeCaseCol      ScopeCase = "col"
@@ -680,7 +680,7 @@ func Selected(flag bool) vecty.Applyer {
 	return vecty.Property("selected", flag)
 }
 
-type ShapeCase string
+type ShapeCase = string
 
 const (
 	ShapeCaseDefault ShapeCase = "default"
@@ -794,7 +794,7 @@ func TabIndex(value int64) vecty.Applyer {
 	return vecty.Property("tabindex", value)
 }
 
-type TargetCase string
+type TargetCase = string
 
 const (
 	TargetCaseBlank  TargetCase = "_blank"
@@ -829,7 +829,7 @@ func Translate(flag bool) vecty.Applyer {
 	return vecty.Property("translate", stringFlag)
 }
 
-type TypeCase string
+type TypeCase = string
 
 const (
 	TypeCaseButton        TypeCase = "button"
@@ -893,7 +893,7 @@ func Width(value uint64) vecty.Applyer {
 	return vecty.Property("width", value)
 }
 
-type WrapCase string
+type WrapCase = string
 
 const (
 	WrapCaseSoft WrapCase = "soft"
