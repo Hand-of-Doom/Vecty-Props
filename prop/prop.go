@@ -183,11 +183,13 @@ type CircleCoords struct {
 }
 
 func (set CircleCoords) buildTemplate() string {
-	intPattern := regexp.MustCompile(`^[0-9]+$`)
-	isInt := intPattern.MatchString(strings.TrimSuffix(set.Radius, "%"))
+	radiusPattern := regexp.MustCompile(`^([0-9]+)(%|)$`)
 
-	if set.Radius[:1] == "-" || !isInt {
-		panic("expected a digit but saw " + set.Radius[:1] + " instead")
+	if !radiusPattern.MatchString(set.Radius) {
+		wrongRunePattern := regexp.MustCompile(`[^0-9]`)
+		wrongRune := wrongRunePattern.FindString(set.Radius)[0]
+
+		panic("expected a digit but saw " + string(wrongRune) + " instead")
 	}
 
 	return fmt.Sprintf("%d,%d,%s",
@@ -197,13 +199,13 @@ func (set CircleCoords) buildTemplate() string {
 type PolyCoords [][2]int64
 
 func (set PolyCoords) buildTemplate() string {
-	if len(set) > 3 {
+	if len(set) < 3 {
 		panic("a polyline must have at least six comma-separated integers")
 	}
 
 	var template string
 	for _, pair := range set {
-		template += fmt.Sprintf("%d,%d", pair[0], pair[1])
+		template += fmt.Sprintf("%d,%d,", pair[0], pair[1])
 	}
 
 	return strings.TrimSuffix(template, ",")
