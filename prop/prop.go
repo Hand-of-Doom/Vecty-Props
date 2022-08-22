@@ -557,7 +557,7 @@ func Optimum(value int64) vecty.Applyer {
 // Pattern specifies a regular expression that an <input> element's value is checked against
 //
 // <input>
-func Pattern(value regexp.Regexp) vecty.Applyer {
+func Pattern(value *regexp.Regexp) vecty.Applyer {
 	return vecty.Property("pattern", value.String())
 }
 
