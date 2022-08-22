@@ -878,14 +878,15 @@ func Size(value uint64) vecty.Applyer {
 func Sizes(values ...[2]uint64) vecty.Applyer {
 	var sizes string
 	for _, pair := range values {
+		if pair[0] == 0 {
+			sizes = "any"
+			break
+		}
+
 		sizes += fmt.Sprintf("%dx%d ", pair[0], pair[1])
 	}
 
-	if sizes == "" {
-		sizes = "any"
-	}
-
-	return vecty.Property("sizes", values)
+	return vecty.Property("sizes", sizes)
 }
 
 // Span specifies the number of columns to span
