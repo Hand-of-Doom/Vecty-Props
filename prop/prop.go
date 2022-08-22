@@ -13,17 +13,6 @@ type (
 	EntityRef = string // id/class referred to element
 )
 
-type CSS map[string]interface{}
-
-func (styleSet CSS) formatRaw() string {
-	var rawCSS string
-	for key, value := range styleSet {
-		rawCSS += fmt.Sprintf("%s:%s;", key, value)
-	}
-
-	return rawCSS
-}
-
 type AcceptCase = string
 
 const (
@@ -484,11 +473,191 @@ func MaxLength(value uint64) vecty.Applyer {
 	return vecty.Property("maxlength", value)
 }
 
+type MediaQuery string
+
+func (b *MediaQuery) And() *MediaQuery {
+	*b += "and "
+
+	return b
+}
+
+func (b *MediaQuery) Comma() *MediaQuery {
+	*b += ", "
+
+	return b
+}
+
+func (b *MediaQuery) Not() *MediaQuery {
+	*b += "not "
+
+	return b
+}
+
+func (b *MediaQuery) All() *MediaQuery {
+	*b += "all "
+
+	return b
+}
+
+func (b *MediaQuery) Aural() *MediaQuery {
+	*b += "aural "
+
+	return b
+}
+
+func (b *MediaQuery) Braille() *MediaQuery {
+	*b += "braille "
+
+	return b
+}
+
+func (b *MediaQuery) Handheld() *MediaQuery {
+	*b += "handheld "
+
+	return b
+}
+
+func (b *MediaQuery) Projection() *MediaQuery {
+	*b += "projection "
+
+	return b
+}
+
+func (b *MediaQuery) Print() *MediaQuery {
+	*b += "print "
+
+	return b
+}
+
+func (b *MediaQuery) Screen() *MediaQuery {
+	*b += "screen "
+
+	return b
+}
+
+func (b *MediaQuery) TTY() *MediaQuery {
+	*b += "tty "
+
+	return b
+}
+
+func (b *MediaQuery) TV() *MediaQuery {
+	*b += "tv "
+
+	return b
+}
+
+func (b *MediaQuery) Width(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(width: %dpx) ", value))
+
+	return b
+}
+
+func (b *MediaQuery) Height(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(heigth: %dpx) ", value))
+
+	return b
+}
+
+func (b *MediaQuery) DeviceWidth(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(device-width: %dpx) ", value))
+
+	return b
+}
+
+func (b *MediaQuery) DeviceHeight(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(device-height: %dpx) ", value))
+
+	return b
+}
+
+type OrientationCase = string
+
+const (
+	OrientationCaseLandscape = "landscape"
+	OrientationCasePortrait  = "portrait"
+)
+
+func (b *MediaQuery) Orientation(t OrientationCase) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(orientation: %s) ", t))
+
+	return b
+}
+
+func (b *MediaQuery) AspectRatio(width, height int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(aspect-ratio: %d/%d) ", width, height))
+
+	return b
+}
+
+func (b *MediaQuery) DeviceAspectRatio(width, height int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(device-aspect-ratio: %d/%d) ", width, height))
+
+	return b
+}
+
+func (b *MediaQuery) Color(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(color: %d) ", value))
+
+	return b
+}
+
+func (b *MediaQuery) ColorIndex(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(color-index: %d) ", value))
+
+	return b
+}
+
+func (b *MediaQuery) Monochrome(value int64) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(monochrome: %d) ", value))
+
+	return b
+}
+
+func (b *MediaQuery) Resolution(value string) *MediaQuery {
+	resolutionPattern := regexp.MustCompile(`^([0-9]+)(dpi|dpcm)$`)
+	if !resolutionPattern.MatchString(value) {
+		panic("unknown dimension")
+	}
+
+	*b += MediaQuery(fmt.Sprintf("(resolution: %s) ", value))
+
+	return b
+}
+
+type ScanCase = string
+
+const (
+	ScanCaseProgressive = "progressive"
+	ScanCaseInterlace   = "interlace"
+)
+
+func (b *MediaQuery) Scan(t ScanCase) *MediaQuery {
+	*b += MediaQuery(fmt.Sprintf("(scan: %s) ", t))
+
+	return b
+}
+
+func (b *MediaQuery) Grid(value bool) *MediaQuery {
+	intValue := 0
+	if value {
+		intValue = 1
+	}
+
+	*b += MediaQuery(fmt.Sprintf("(scan: %d) ", intValue))
+
+	return b
+}
+
+func NewMediaQuery() *MediaQuery {
+	return new(MediaQuery)
+}
+
 // Media specifies what media/device the linked document is optimized for
 //
 // <a>, <area>, <link>, <source>, <style>
-func Media(values CSS) vecty.Applyer {
-	return vecty.Property("media", values.formatRaw())
+func Media(value *MediaQuery) vecty.Applyer {
+	return vecty.Property("media", string(*value))
 }
 
 type MethodCase = string
@@ -911,8 +1080,7 @@ func Wrap(c WrapCase) vecty.Applyer {
 	return vecty.Property("wrap", c)
 }
 
-// Vecty has an event package so this function does literally nothing.
-// No effect. No errors. Just does nothing
+// Vecty has an event package so this function does literally nothing
 /*
 func On(event string, rawJS string) vecty.Applyer {
 	return vecty.Property("on"+event, rawJS)
