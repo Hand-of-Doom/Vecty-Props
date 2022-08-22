@@ -995,12 +995,7 @@ func Title(value string) vecty.Applyer {
 //
 // Global Attributes
 func Translate(flag bool) vecty.Applyer {
-	stringFlag := "no"
-	if flag {
-		stringFlag = "yes"
-	}
-
-	return vecty.Property("translate", stringFlag)
+	return vecty.Property("translate", flag)
 }
 
 type TypeCase = string
