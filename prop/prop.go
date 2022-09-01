@@ -928,11 +928,50 @@ func SrcLang(value string) vecty.Applyer {
 	return vecty.Property("srclang", value)
 }
 
+type SrcsetPair struct {
+	url      string
+	template string
+}
+
+func (b *SrcsetPair) Width(value uint64) *SrcsetPair {
+	b.template = fmt.Sprintf("%s %dw", b.url, value)
+
+	return b
+}
+
+func (b *SrcsetPair) PixelDestiny(value uint64) *SrcsetPair {
+	b.template = fmt.Sprintf("%s %dx", b.url, value)
+
+	return b
+}
+
+func (b *SrcsetPair) build() string {
+	if b.template == "" {
+		panic(fmt.Sprintf("Bad value %s for attribute srcset on element source: Must contain one or more image candidate strings.",
+			b.template))
+	}
+
+	return b.template
+}
+
+func NewSrcsetPair(url string) *SrcsetPair {
+	return &SrcsetPair{
+		url: url,
+	}
+}
+
 // Srcset specifies the URL of the image to use in different situations
 //
 // <img>, <source>
-func Srcset(value URL) vecty.Applyer {
-	return vecty.Property("srcset", value)
+func Srcset(values ...*SrcsetPair) vecty.Applyer {
+	pairs := make([]string, 0, len(values))
+
+	for _, pair := range values {
+		pairs = append(pairs, pair.build())
+	}
+	tpl := strings.Join(pairs, ", ")
+
+	return vecty.Property("srcset", tpl)
 }
 
 // Start specifies the start value of an ordered list
