@@ -876,21 +876,117 @@ func Size(value uint64) vecty.Applyer {
 	return vecty.Property("size", value)
 }
 
-// Sizes specifies the size of the linked resource
-//
-// <img>, <link>, <source>
-func Sizes(values ...[2]uint64) vecty.Applyer {
-	var stringValues string
-	for _, pair := range values {
-		if pair[0] == 0 {
-			stringValues = "any"
+type SizesSet interface {
+	buildTemplate() string
+}
+
+// MediaQuerySize applies to <img> <source>
+type MediaQuerySize struct {
+	conditions []string
+	size       string
+}
+
+func (b *MediaQuerySize) MinWidth(value string) *MediaQuerySize {
+	b.conditions = append(b.conditions, fmt.Sprintf("(min-width: %s)", value))
+
+	return b
+}
+
+func (b *MediaQuerySize) MaxWidth(value string) *MediaQuerySize {
+	b.conditions = append(b.conditions, fmt.Sprintf("(max-width: %s)", value))
+
+	return b
+}
+
+func (b *MediaQuerySize) And() *MediaQuerySize {
+	b.conditions = append(b.conditions, "and")
+
+	return b
+}
+
+func (b *MediaQuerySize) Or() *MediaQuerySize {
+	b.conditions = append(b.conditions, "or")
+
+	return b
+}
+
+func (b *MediaQuerySize) build() string {
+	tpl := strings.Join(b.conditions, " ")
+
+	if len(b.conditions) > 1 {
+		tpl = fmt.Sprintf("(%s)", tpl)
+	}
+	tpl += fmt.Sprintf(" %s", b.size)
+
+	return tpl
+}
+
+func NewMediaQuerySize(size string) *MediaQuerySize {
+	return &MediaQuerySize{
+		size: size,
+	}
+}
+
+type ImageSizes struct {
+	sizes []string
+}
+
+func (b *ImageSizes) Group(size *MediaQuerySize) *ImageSizes {
+	b.sizes = append(b.sizes, size.build())
+
+	return b
+}
+
+func (b *ImageSizes) Default(size string) *ImageSizes {
+	b.sizes = append(b.sizes, size)
+
+	return b
+}
+
+func (b *ImageSizes) buildTemplate() string {
+	return strings.Join(b.sizes, ", ")
+}
+
+func NewImageSizes() *ImageSizes {
+	return &ImageSizes{}
+}
+
+type LinkSizes struct {
+	sizes [][2]uint64
+}
+
+func (b *LinkSizes) Pair(width uint64, height uint64) *LinkSizes {
+	b.sizes = append(b.sizes, [2]uint64{width, height})
+
+	return b
+}
+
+func (b *LinkSizes) buildTemplate() string {
+	var tpl string
+
+	for _, size := range b.sizes {
+		width, height := size[0], size[1]
+
+		if width == 0 || height == 0 {
+			tpl = "any"
 			break
 		}
 
-		stringValues += fmt.Sprintf("%dx%d ", pair[0], pair[1])
+		tpl += fmt.Sprintf("%dx%d ", width, height)
 	}
 
-	return vecty.Property("sizes", stringValues)
+	return tpl
+}
+
+func NewLinkSizes() *LinkSizes {
+	return &LinkSizes{}
+}
+
+// Sizes specifies the size of the linked resource
+//
+// <img>, <link>, <source>
+func Sizes(value SizesSet) vecty.Applyer {
+	return vecty.Property("sizes", value.buildTemplate())
 }
 
 // Span specifies the number of columns to span
