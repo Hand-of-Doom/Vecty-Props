@@ -1035,7 +1035,7 @@ func (b *SrcsetPair) Width(value uint64) *SrcsetPair {
 	return b
 }
 
-func (b *SrcsetPair) PixelDestiny(value uint64) *SrcsetPair {
+func (b *SrcsetPair) PixelDensity(value uint64) *SrcsetPair {
 	b.template = fmt.Sprintf("%s %dx", b.url, value)
 
 	return b
