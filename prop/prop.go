@@ -1193,16 +1193,19 @@ func Step(value uint64) vecty.Applyer {
 	return vecty.Property("step", stringValue)
 }
 
+type StylePair = string
+
+func NewStylePair(key, value string) StylePair {
+	return fmt.Sprintf("%s:%s", key, value)
+}
+
 // Style specifies an inline CSS style for an element
+// !! vecty.Style duplicate
 //
 // Global Attributes
-
-// Vecty has a style package so this function panics if I set the style with vecty.Property
-/*
-func Style(values CSS) vecty.Applyer {
-	return vecty.Property("style", values.FormatRaw())
+func Style(values ...StylePair) vecty.Applyer {
+	return vecty.Attribute("style", strings.Join(values, ";"))
 }
-*/
 
 // TabIndex specifies the tabbing order of an element
 //
@@ -1319,9 +1322,8 @@ func Wrap(c WrapCase) vecty.Applyer {
 	return vecty.Property("wrap", c)
 }
 
-// Vecty has an event package so this function does literally nothing
-/*
+// On used when you need to pass the raw javascript
+// otherwise use the event vecty package
 func On(event string, rawJS string) vecty.Applyer {
-	return vecty.Property("on"+event, rawJS)
+	return vecty.Attribute("on"+event, rawJS)
 }
-*/
