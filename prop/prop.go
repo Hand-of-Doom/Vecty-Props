@@ -1,3 +1,5 @@
+// Package prop contains the wrappers for HTML attributes
+// https://github.com/KartoshkaPy/Vecty-Props/tree/main/prop
 package prop
 
 import (
@@ -9,8 +11,11 @@ import (
 )
 
 type (
-	URL       = string // google.com
-	EntityRef = string // id/class referred to element
+	// URL is a reference to something outside
+	// ex: google.com, /api/endpoint, /file.txt
+	URL = string
+	// EntityRef is a reference to class or id
+	EntityRef = string
 )
 
 type AcceptCase = string
