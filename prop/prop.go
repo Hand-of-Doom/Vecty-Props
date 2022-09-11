@@ -154,7 +154,7 @@ func Controls(flag bool) vecty.Applyer {
 }
 
 type CoordsSet interface {
-	buildTemplate() string
+	buildCoords() string
 }
 
 type RectCoords struct {
@@ -164,7 +164,7 @@ type RectCoords struct {
 	YBottomRight int64
 }
 
-func (set RectCoords) buildTemplate() string {
+func (set RectCoords) buildCoords() string {
 	if set.XLeftTop >= set.XBottomRight {
 		panic("the first integer must be less than the third")
 	}
@@ -182,7 +182,7 @@ type CircleCoords struct {
 	Radius string
 }
 
-func (set CircleCoords) buildTemplate() string {
+func (set CircleCoords) buildCoords() string {
 	radiusPattern := regexp.MustCompile(`^([0-9]+)(%|)$`)
 
 	if !radiusPattern.MatchString(set.Radius) {
@@ -198,7 +198,7 @@ func (set CircleCoords) buildTemplate() string {
 
 type PolyCoords [][2]int64
 
-func (set PolyCoords) buildTemplate() string {
+func (set PolyCoords) buildCoords() string {
 	if len(set) < 3 {
 		panic("a polyline must have at least six comma-separated integers")
 	}
@@ -215,7 +215,7 @@ func (set PolyCoords) buildTemplate() string {
 //
 // <area>
 func Coords(value CoordsSet) vecty.Applyer {
-	return vecty.Property("coords", value.buildTemplate())
+	return vecty.Property("coords", value.buildCoords())
 }
 
 // Data specifies the URL of the resource to be used by the object
@@ -877,7 +877,7 @@ func Size(value uint64) vecty.Applyer {
 }
 
 type SizesSet interface {
-	buildTemplate() string
+	buildSizes() string
 }
 
 // MediaQuerySize applies to <img> <source>
@@ -943,7 +943,7 @@ func (b *ImageSizes) Default(size string) *ImageSizes {
 	return b
 }
 
-func (b *ImageSizes) buildTemplate() string {
+func (b *ImageSizes) buildSizes() string {
 	return strings.Join(b.sizes, ", ")
 }
 
@@ -961,7 +961,7 @@ func (b *LinkSizes) Pair(width uint64, height uint64) *LinkSizes {
 	return b
 }
 
-func (b *LinkSizes) buildTemplate() string {
+func (b *LinkSizes) buildSizes() string {
 	var tpl string
 
 	for _, size := range b.sizes {
@@ -986,7 +986,7 @@ func NewLinkSizes() *LinkSizes {
 //
 // <img>, <link>, <source>
 func Sizes(value SizesSet) vecty.Applyer {
-	return vecty.Property("sizes", value.buildTemplate())
+	return vecty.Property("sizes", value.buildSizes())
 }
 
 // Span specifies the number of columns to span
