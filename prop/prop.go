@@ -484,98 +484,98 @@ func MaxLength(value uint64) vecty.Applyer {
 
 type MediaQuery string
 
-func (b *MediaQuery) And() *MediaQuery {
-	*b += "and "
+func (b MediaQuery) And() MediaQuery {
+	b += "and "
 
 	return b
 }
 
-func (b *MediaQuery) Comma() *MediaQuery {
-	*b += ", "
+func (b MediaQuery) Comma() MediaQuery {
+	b += ", "
 
 	return b
 }
 
-func (b *MediaQuery) Not() *MediaQuery {
-	*b += "not "
+func (b MediaQuery) Not() MediaQuery {
+	b += "not "
 
 	return b
 }
 
-func (b *MediaQuery) All() *MediaQuery {
-	*b += "all "
+func (b MediaQuery) All() MediaQuery {
+	b += "all "
 
 	return b
 }
 
-func (b *MediaQuery) Aural() *MediaQuery {
-	*b += "aural "
+func (b MediaQuery) Aural() MediaQuery {
+	b += "aural "
 
 	return b
 }
 
-func (b *MediaQuery) Braille() *MediaQuery {
-	*b += "braille "
+func (b MediaQuery) Braille() MediaQuery {
+	b += "braille "
 
 	return b
 }
 
-func (b *MediaQuery) Handheld() *MediaQuery {
-	*b += "handheld "
+func (b MediaQuery) Handheld() MediaQuery {
+	b += "handheld "
 
 	return b
 }
 
-func (b *MediaQuery) Projection() *MediaQuery {
-	*b += "projection "
+func (b MediaQuery) Projection() MediaQuery {
+	b += "projection "
 
 	return b
 }
 
-func (b *MediaQuery) Print() *MediaQuery {
-	*b += "print "
+func (b MediaQuery) Print() MediaQuery {
+	b += "print "
 
 	return b
 }
 
-func (b *MediaQuery) Screen() *MediaQuery {
-	*b += "screen "
+func (b MediaQuery) Screen() MediaQuery {
+	b += "screen "
 
 	return b
 }
 
-func (b *MediaQuery) TTY() *MediaQuery {
-	*b += "tty "
+func (b MediaQuery) TTY() MediaQuery {
+	b += "tty "
 
 	return b
 }
 
-func (b *MediaQuery) TV() *MediaQuery {
-	*b += "tv "
+func (b MediaQuery) TV() MediaQuery {
+	b += "tv "
 
 	return b
 }
 
-func (b *MediaQuery) Width(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(width: %dpx) ", value))
+func (b MediaQuery) Width(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(width: %dpx) ", value))
 
 	return b
 }
 
-func (b *MediaQuery) Height(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(heigth: %dpx) ", value))
+func (b MediaQuery) Height(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(heigth: %dpx) ", value))
 
 	return b
 }
 
-func (b *MediaQuery) DeviceWidth(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(device-width: %dpx) ", value))
+func (b MediaQuery) DeviceWidth(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(device-width: %dpx) ", value))
 
 	return b
 }
 
-func (b *MediaQuery) DeviceHeight(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(device-height: %dpx) ", value))
+func (b MediaQuery) DeviceHeight(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(device-height: %dpx) ", value))
 
 	return b
 }
@@ -587,49 +587,49 @@ const (
 	OrientationCasePortrait  = "portrait"
 )
 
-func (b *MediaQuery) Orientation(t OrientationCase) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(orientation: %s) ", t))
+func (b MediaQuery) Orientation(t OrientationCase) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(orientation: %s) ", t))
 
 	return b
 }
 
-func (b *MediaQuery) AspectRatio(width, height int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(aspect-ratio: %d/%d) ", width, height))
+func (b MediaQuery) AspectRatio(width, height int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(aspect-ratio: %d/%d) ", width, height))
 
 	return b
 }
 
-func (b *MediaQuery) DeviceAspectRatio(width, height int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(device-aspect-ratio: %d/%d) ", width, height))
+func (b MediaQuery) DeviceAspectRatio(width, height int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(device-aspect-ratio: %d/%d) ", width, height))
 
 	return b
 }
 
-func (b *MediaQuery) Color(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(color: %d) ", value))
+func (b MediaQuery) Color(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(color: %d) ", value))
 
 	return b
 }
 
-func (b *MediaQuery) ColorIndex(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(color-index: %d) ", value))
+func (b MediaQuery) ColorIndex(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(color-index: %d) ", value))
 
 	return b
 }
 
-func (b *MediaQuery) Monochrome(value int64) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(monochrome: %d) ", value))
+func (b MediaQuery) Monochrome(value int64) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(monochrome: %d) ", value))
 
 	return b
 }
 
-func (b *MediaQuery) Resolution(value string) *MediaQuery {
+func (b MediaQuery) Resolution(value string) MediaQuery {
 	resolutionPattern := regexp.MustCompile(`^([0-9]+)(dpi|dpcm)$`)
 	if !resolutionPattern.MatchString(value) {
 		panic("unknown dimension")
 	}
 
-	*b += MediaQuery(fmt.Sprintf("(resolution: %s) ", value))
+	b += MediaQuery(fmt.Sprintf("(resolution: %s) ", value))
 
 	return b
 }
@@ -641,32 +641,32 @@ const (
 	ScanCaseInterlace   = "interlace"
 )
 
-func (b *MediaQuery) Scan(t ScanCase) *MediaQuery {
-	*b += MediaQuery(fmt.Sprintf("(scan: %s) ", t))
+func (b MediaQuery) Scan(t ScanCase) MediaQuery {
+	b += MediaQuery(fmt.Sprintf("(scan: %s) ", t))
 
 	return b
 }
 
-func (b *MediaQuery) Grid(value bool) *MediaQuery {
+func (b MediaQuery) Grid(value bool) MediaQuery {
 	var intValue int
 	if value {
 		intValue = 1
 	}
 
-	*b += MediaQuery(fmt.Sprintf("(scan: %d) ", intValue))
+	b += MediaQuery(fmt.Sprintf("(scan: %d) ", intValue))
 
 	return b
 }
 
-func NewMediaQuery() *MediaQuery {
-	return new(MediaQuery)
+func NewMediaQuery() MediaQuery {
+	return ""
 }
 
 // Media specifies what media/device the linked document is optimized for
 //
 // <a>, <area>, <link>, <source>, <style>
-func Media(value *MediaQuery) vecty.Applyer {
-	return vecty.Property("media", string(*value))
+func Media(value MediaQuery) vecty.Applyer {
+	return vecty.Property("media", string(value))
 }
 
 type MethodCase = string
