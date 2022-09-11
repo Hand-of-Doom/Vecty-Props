@@ -1010,11 +1010,113 @@ func Src(value URL) vecty.Applyer {
 	return vecty.Property("src", value)
 }
 
+type Attr struct {
+	key,
+	value string
+}
+
+func (b *Attr) build() string {
+	return fmt.Sprintf(`%s="%s"`, b.key, b.value)
+}
+
+func NewAttr(key, value string) *Attr {
+	return &Attr{
+		key:   key,
+		value: value,
+	}
+}
+
+type FakeDOM interface {
+	buildTree() string
+}
+
+type RawNode struct {
+	tree string
+}
+
+func (b *RawNode) Include(nodes ...FakeDOM) *RawNode {
+	for _, node := range nodes {
+		b.tree += node.buildTree()
+	}
+
+	return b
+}
+
+func (b *RawNode) buildTree() string {
+	return b.tree
+}
+
+func NewRawNode(html string) *RawNode {
+	return &RawNode{
+		tree: html,
+	}
+}
+
+func NewEmptyNode(nodes ...Node) *RawNode {
+	var tree string
+	for _, node := range nodes {
+		tree += node.buildTree()
+	}
+
+	return &RawNode{
+		tree: tree,
+	}
+}
+
+type Node struct {
+	name  string
+	attrs []*Attr
+	nodes []FakeDOM
+}
+
+func (b *Node) Include(nodes ...FakeDOM) *Node {
+	b.nodes = append(b.nodes, nodes...)
+
+	return b
+}
+
+func (b *Node) single() bool {
+	singleTags := "area base br col command embed hr img input keygen link meta param source track wbr"
+
+	return strings.Contains(b.name, singleTags)
+}
+
+func (b *Node) buildTree() string {
+	tpl := fmt.Sprintf("<%s", b.name)
+
+	if len(b.attrs) != 0 {
+		attrs := " "
+		for _, attr := range b.attrs {
+			attrs += attr.build()
+		}
+
+		tpl += attrs
+	}
+	tpl += ">"
+
+	for _, node := range b.nodes {
+		tpl += node.buildTree()
+	}
+
+	if !b.single() {
+		tpl += fmt.Sprintf("</%s>", b.name)
+	}
+
+	return tpl
+}
+
+func NewNode(name string, attrs ...*Attr) *Node {
+	return &Node{
+		name:  name,
+		attrs: attrs,
+	}
+}
+
 // SrcDoc specifies the HTML content of the page to show in the <iframe>
 //
 // <iframe>
-func SrcDoc(value vecty.HTML) vecty.Applyer {
-	return vecty.Property("srcdoc", value.Node().String())
+func SrcDoc(value FakeDOM) vecty.Applyer {
+	return vecty.Property("srcdoc", value.buildTree())
 }
 
 // SrcLang specifies the language of the track text data (required if kind="subtitles")
