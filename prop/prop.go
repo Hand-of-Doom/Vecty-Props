@@ -163,57 +163,94 @@ type CoordsSet interface {
 }
 
 type RectCoords struct {
-	XLeftTop     int64
-	YLeftTop     int64
-	XBottomRight int64
-	YBottomRight int64
+	xLeftTop     int64
+	yLeftTop     int64
+	xBottomRight int64
+	yBottomRight int64
 }
 
 func (set RectCoords) buildCoords() string {
-	if set.XLeftTop >= set.XBottomRight {
+	if set.xLeftTop >= set.xBottomRight {
 		panic("the first integer must be less than the third")
 	}
-	if set.YLeftTop >= set.YBottomRight {
+	if set.yLeftTop >= set.yBottomRight {
 		panic("the second integer must be less than the fourth")
 	}
 
 	return fmt.Sprintf("%d,%d,%d,%d",
-		set.XLeftTop, set.YLeftTop, set.XBottomRight, set.YBottomRight)
+		set.xLeftTop, set.yLeftTop, set.xBottomRight, set.yBottomRight)
+}
+
+func NewRectCoords(xLeftTop, yLeftTop, xBottomRight, yBottomRight int64) *RectCoords {
+	return &RectCoords{
+		xLeftTop:     xLeftTop,
+		yLeftTop:     yLeftTop,
+		xBottomRight: xBottomRight,
+		yBottomRight: yBottomRight,
+	}
 }
 
 type CircleCoords struct {
-	X      int64
-	Y      int64
-	Radius string
+	x      int64
+	y      int64
+	radius string
 }
 
 func (set CircleCoords) buildCoords() string {
 	radiusPattern := regexp.MustCompile(`^([0-9]+)(%|)$`)
 
-	if !radiusPattern.MatchString(set.Radius) {
+	if !radiusPattern.MatchString(set.radius) {
 		wrongRunePattern := regexp.MustCompile(`[^0-9]`)
-		wrongRune := wrongRunePattern.FindString(set.Radius)[0]
+		wrongRune := wrongRunePattern.FindString(set.radius)[0]
 
 		panic("expected a digit but saw " + string(wrongRune) + " instead")
 	}
 
 	return fmt.Sprintf("%d,%d,%s",
-		set.X, set.Y, set.Radius)
+		set.x, set.y, set.radius)
 }
 
-type PolyCoords [][2]int64
+func NewCircleCoords(x, y int64, radius string) *CircleCoords {
+	return &CircleCoords{
+		x:      x,
+		y:      y,
+		radius: radius,
+	}
+}
+
+type PolyCoord struct {
+	x int64
+	y int64
+}
+
+func NewPolyCoord(x, y int64) *PolyCoord {
+	return &PolyCoord{
+		x: x,
+		y: y,
+	}
+}
+
+type PolyCoords struct {
+	pairs []*PolyCoord
+}
 
 func (set PolyCoords) buildCoords() string {
-	if len(set) < 3 {
+	if len(set.pairs) < 3 {
 		panic("a polyline must have at least six comma-separated integers")
 	}
 
 	var template string
-	for _, pair := range set {
-		template += fmt.Sprintf("%d,%d,", pair[0], pair[1])
+	for _, pair := range set.pairs {
+		template += fmt.Sprintf("%d,%d,", pair.x, pair.y)
 	}
 
 	return strings.TrimSuffix(template, ",")
+}
+
+func NewPolyCoords(pairs ...*PolyCoord) *PolyCoords {
+	return &PolyCoords{
+		pairs: pairs,
+	}
 }
 
 // Coords specifies the coordinates of the area
