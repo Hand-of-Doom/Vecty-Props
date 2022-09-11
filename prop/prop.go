@@ -707,7 +707,7 @@ func Muted(flag bool) vecty.Applyer {
 // Name specifies the name of the element
 //
 // <button>, <fieldset>, <form>, <iframe>, <input>, <map>, <meta>, <object>, <output>, <param>, <select>, <textarea>
-func Name(value EntityRef) vecty.Applyer {
+func Name(value string) vecty.Applyer {
 	return vecty.Property("name", value)
 }
 
