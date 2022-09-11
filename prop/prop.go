@@ -704,10 +704,22 @@ func Muted(flag bool) vecty.Applyer {
 	return vecty.Property("muted", flag)
 }
 
+// NameCase applies to <meta>
+type NameCase = string
+
+const (
+	NameCaseApplication NameCase = "application-name"
+	NameCaseAuthor      NameCase = "author"
+	NameCaseDescription NameCase = "description"
+	NameCaseGenerator   NameCase = "generator"
+	NameCaseKeywords    NameCase = "keywords"
+	NameCaseViewport    NameCase = "viewport"
+)
+
 // Name specifies the name of the element
 //
 // <button>, <fieldset>, <form>, <iframe>, <input>, <map>, <meta>, <object>, <output>, <param>, <select>, <textarea>
-func Name(value string) vecty.Applyer {
+func Name(value NameCase) vecty.Applyer {
 	return vecty.Property("name", value)
 }
 
