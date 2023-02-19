@@ -1,4 +1,4 @@
-module github.com/KartoshkaPy/Vecty-Props
+module github.com/Hand-of-Doom/Vecty-Props
 
 go 1.19
 
