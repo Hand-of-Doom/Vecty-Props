@@ -14,8 +14,6 @@ type (
 	// URL is a reference to something outside
 	// ex: google.com, /api/endpoint, /file.txt
 	URL = string
-	// EntityRef is a reference to class or id
-	EntityRef = string
 )
 
 type AcceptCase = string
@@ -114,13 +112,6 @@ func Checked(flag bool) vecty.Applyer {
 // <blockquote>, <del>, <ins>, <q>
 func Cite(value URL) vecty.Applyer {
 	return vecty.Property("cite", value)
-}
-
-// Class specifies one or more classnames for an element (refers to a class in a style sheet)
-//
-// Global Attributes
-func Class(values ...string) vecty.Applyer {
-	return vecty.Property("class", strings.Join(values, " "))
 }
 
 // Cols specifies the visible width of a text area
@@ -265,13 +256,6 @@ func Coords(value CoordsSet) vecty.Applyer {
 // <object>
 func Data(value URL) vecty.Applyer {
 	return vecty.Property("data", value)
-}
-
-// DataPair used to store custom data private to the page or application
-//
-// Global Attributes
-func DataPair(key string, value interface{}) vecty.Applyer {
-	return vecty.Property("data-"+key, value)
 }
 
 // Datetime specifies the date and time
@@ -1245,20 +1229,6 @@ func Step(value uint64) vecty.Applyer {
 	}
 
 	return vecty.Property("step", stringValue)
-}
-
-type StylePair = string
-
-func NewStylePair(key, value string) StylePair {
-	return fmt.Sprintf("%s:%s", key, value)
-}
-
-// Style specifies an inline CSS style for an element
-// !! vecty.Style duplicate
-//
-// Global Attributes
-func Style(values ...StylePair) vecty.Applyer {
-	return vecty.Attribute("style", strings.Join(values, ";"))
 }
 
 // TabIndex specifies the tabbing order of an element
